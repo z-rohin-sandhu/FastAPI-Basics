@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	<title>Delete Item</title>
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+		<h3 class="text-center"> UPDATE and DELETE ITEMS </h3>
+		{% for error in errors %}
+			<div class="alert alert-danger" role="alert">
+				{{ error }}
+			</div>
+		{% endfor %}
+
+		<div id="result" class="text-danger"></div>
+		<table id="datatable" class="table table-striped">
+  			<thead>
+    			<tr>
+      				<th scope="col">S.No.</th>
+      				<th scope="col">Title</th>
+      				<th scope="col">Description</th>
+      				<th scope="col">Action</th>
+    			</tr>
+  			</thead>
+  			<tbody>
+				{% for item in items %}
+    			<tr>
+      				<th scope="row">{{ loop.index }}</th>
+      				<td>{{ item.title }}</td>
+      				<td>{{ item.description }}</td>
+      				<td>
+						<button class="btn btn-danger" onclick="delete_item({{item.id}})">Delete</button>
+						<a href="/update/{{item.id}}" class="btn btn-primary">Edit</a>
+					</td>
+    			</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
+
+{% block script %}
+	<script type="text/javascript">
+	$(document).ready(function()
+	{
+		$("#datatable").DataTable()
+	});
+	</script>
+	<script type="text/javascript">
+		function delete_item(id)
+        console.log(id)
+		{
+            console.log("hi")
+			fetch("/item/delete/"+id, {method:'DELETE'})
+			.then(response => response.json())
+			.then(data => document.getElementById("result").innerHTML = data.message)
+		}
+	</script>
+{% endblock %}
